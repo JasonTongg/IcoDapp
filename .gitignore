@@ -52,3 +52,28 @@ node_modules
 
 # Hardhat Ignition default folder for deployments against a local node
 ignition/deployments/chain-31337
+
+# Node.js dependencies
+node_modules/
+
+# Hardhat build artifacts
+artifacts/
+cache/
+
+# Environment variables file
+.env
+
+# Logs
+*.log
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# IDE specific files
+.vscode/
+.idea/
+
+# NPM/Yarn
+package-lock.json
+yarn.lock
