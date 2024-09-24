@@ -1,5 +1,4 @@
 import React from "react";
-import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 
 export const metadata = {
@@ -10,8 +9,7 @@ export const metadata = {
 export default function Default({ children }) {
   return (
     <html lang="en">
-      <body>
-        <Navbar />
+      <body className="bg-[#FFF2D8] w-full min-h-screen">
         {children}
         <Footer />
       </body>
