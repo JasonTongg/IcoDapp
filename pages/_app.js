@@ -1,6 +1,8 @@
 import "../app/globals.css";
 import Layout from "../layout/default";
 import React, { useState, useEffect } from "react";
+import { Provider } from "react-redux";
+import Store from "../store/store";
 
 function MyApp({ Component, pageProps }) {
   const [mounted, setMounted] = useState(false);
@@ -14,9 +16,11 @@ function MyApp({ Component, pageProps }) {
   }
 
   return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
+    <Provider store={Store}>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </Provider>
   );
 }
 
