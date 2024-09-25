@@ -8,6 +8,8 @@ import {
   useWeb3ModalProvider,
 } from "@web3modal/ethers/react";
 import Navbar from "../components/navbar";
+import Logo from "../public/Logo.png";
+import Image from "next/image";
 
 const projectId = "d4e79a3bc1f5545a422926acb6bb88b8";
 
@@ -110,8 +112,8 @@ export default function Index() {
     if (contract) {
       try {
         const allTokenHolder = await contract.getTokenHolder();
-        setHolderArray([]);
-        allTokenHolder.map(async (item) => {
+        const holder = [];
+        allTokenHolder.map(async (item, index) => {
           const singleHolderData = await contract.getTokenHolderData(item);
           const formattedData = {
             _tokenId: singleHolderData[0],
@@ -120,9 +122,10 @@ export default function Index() {
             _totalToken: singleHolderData[3],
             _tokenHolder: singleHolderData[4],
           };
-          setHolderArray([...holderArray, formattedData]);
-          console.log(formattedData);
+          holder[index] = formattedData;
         });
+        console.log("holder: " + holder);
+        setHolderArray(holder);
       } catch (error) {
         console.error("Error Get Transaction Count: ", error);
       }
@@ -235,8 +238,8 @@ export default function Index() {
         balance={accountBalance}
       />
       <section
-        className="py-4 px-16 grid gap-4"
-        style={{ gridTemplateColumns: "2fr 1fr" }}
+        className="py-10 px-16 grid gap-4"
+        style={{ gridTemplateColumns: "1.5fr 1fr" }}
       >
         <div className="text-[#113946] flex flex-col items-start justify-center gap-4">
           <h2 className="text-4xl font-bold">
@@ -250,52 +253,87 @@ export default function Index() {
             while driving innovation in the DeFi space.
           </p>
         </div>
-        <div>Image</div>
+        <div className="relative flex items-center justify-center">
+          <Image
+            src={Logo}
+            alt="logo"
+            className="w-[300px] animate-spin !duration-[3000ms]"
+          />
+          <div className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]">
+            <Image
+              src={Logo}
+              alt="logo"
+              className="w-[100px] animate-spin !duration-[3000ms]"
+            />
+          </div>
+        </div>
       </section>
-      <section className="flex flex-col items-center justify-center gap-4 w-full py-4 px-16">
-        <h2 className="text-3xl">Tokenomics</h2>
-        <div className="grid grid-cols-2 w-full">
-          <div>Image</div>
+      <section className="flex gap-4 flex-col items-center justify-center w-full py-4 px-16">
+        <h2 className="text-4xl font-bold text-[#113946]">Tokenomics</h2>
+        <div className="w-full flex items-center justify-center gap-8">
+          <Image src={Logo} className="w-[200px] animate-bounce"></Image>
           <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-2">
-              <p>Token Name</p>
-              <p>JSN Token</p>
+            <div className="flex flex-col gap-2 text-[#113946]">
+              <p className="font-bold text-2xl">Token Name</p>
+              <p className="bg-white rounded-[10px] py-2 px-4 w-[300px] border-[3px] border-[#BCA37F]">
+                JSN Token
+              </p>
             </div>
-            <div className="flex flex-col gap-2">
-              <p>Symbol</p>
-              <p>JSN</p>
+            <div className="flex flex-col gap-2 text-[#113946]">
+              <p className="font-bold text-2xl">Symbol</p>
+              <p className="bg-white rounded-[10px] py-2 px-4 w-[300px] border-[3px] border-[#BCA37F]">
+                JSN
+              </p>
             </div>
-            <div className="flex flex-col gap-2">
-              <p>Total Supply</p>
-              <p>{noOfToken}</p>
+            <div className="flex flex-col gap-2 text-[#113946]">
+              <p className="font-bold text-2xl">Total Supply</p>
+              <p className="bg-white rounded-[10px] py-2 px-4 w-[300px] border-[3px] border-[#BCA37F]">
+                {noOfToken ? noOfToken + " JSN" : "0 JSN"}
+              </p>
             </div>
           </div>
         </div>
       </section>
-      <section className="flex flex-col items-center justify-center gap-4 w-full py-4 px-16">
-        <h2>Transfer Token</h2>
-        <div>
-          <div>
-            <label htmlFor="address">To Address</label>
-            <input
-              type="text"
-              id="address"
-              onChange={(e) => setInputAddrss(e.target.value)}
-            />
+      <section className="flex flex-col items-center justify-center gap-4 w-full py-4 px-16 mt-9">
+        <h2 className="text-4xl font-bold text-[#113946]">Transfer Token</h2>
+        <div className="w-[50vw] bg-red-400">
+          <div
+            className="w-[60%] flex flex-col gap-3 py-8 px-4 bg-white"
+            style={{ clipPath: "polygon(0 0%, 100% 0, 85% 100%, 0% 100%)" }}
+          >
+            <div className="flex flex-col gap-2 text-[#113946]">
+              <label htmlFor="address" className="font-bold text-xl">
+                To Address
+              </label>
+              <input
+                type="text"
+                id="address"
+                onChange={(e) => setInputAddrss(e.target.value)}
+                className="bg-white outline-none rounded-[10px] py-2 px-4 w-[85%] border-[3px] border-[#BCA37F]"
+              />
+            </div>
+            <div className="flex flex-col gap-2 text-[#113946]">
+              <label htmlFor="value" className="font-bold text-xl">
+                value
+              </label>
+              <input
+                type="number"
+                id="value"
+                onChange={(e) => setInputValue(e.target.value)}
+                className="bg-white outline-none rounded-[10px] py-2 px-4 w-[85%] border-[3px] border-[#BCA37F]"
+              />
+            </div>
+            <button
+              onClick={transferToken}
+              className="bg-[#BCA37F] mt-2 py-2 px-2 flex w-[85%] items-center justify-center rounded-[10px] font-bold text-white"
+            >
+              Transfer
+            </button>
           </div>
-          <div>
-            <label htmlFor="value">value</label>
-            <input
-              type="number"
-              id="value"
-              onChange={(e) => setInputValue(e.target.value)}
-            />
-          </div>
-          <button onClick={transferToken}>Transfer</button>
         </div>
       </section>
-      <section>
-        <h2>Holders</h2>
+      <section className="mt-8 w-full py-4 px-16 flex flex-col items-center justify-center">
+        <h2 className="text-4xl font-bold text-[#113946]">Holders</h2>
         {holderArray?.length > 0 && (
           <div className="flex items-center justify-center flex-col gap-4">
             {holderArray?.map((item, index) => (

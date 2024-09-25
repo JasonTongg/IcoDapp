@@ -1,5 +1,6 @@
 import React from "react";
-import { ethers } from "ethers";
+import Logo from "../public/Logo.png";
+import Image from "next/image";
 
 export default function navbar({
   isConnected,
@@ -10,10 +11,10 @@ export default function navbar({
 }) {
   return (
     <div className="flex items-center justify-between gap-4 py-4 px-16 bg-[#BCA37F]">
-      <p>JSN</p>
+      <Image src={Logo} alt="logo" className="w-[70px] animate-spin" />
       <div className="flex items-center justify-center gap-4">
         <div className="bg-[#EAD7BB] py-2 px-5 rounded-[15px] text-[#113946]">
-          Balance: {ethers?.formatEther(BigInt(balance))} JSN
+          Balance: {balance} JSN
         </div>
         <div className="bg-[#EAD7BB] py-2 px-5 rounded-[15px] text-[#113946]">
           {isConnected ? (
