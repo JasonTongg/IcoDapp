@@ -10,6 +10,8 @@ import {
 import Navbar from "../components/navbar";
 import Logo from "../public/Logo.png";
 import Image from "next/image";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const projectId = "d4e79a3bc1f5545a422926acb6bb88b8";
 
@@ -20,6 +22,14 @@ const sepolia = {
   explorerUrl: "https://sepolia.etherscan.io",
   rpcUrl: "https://sepolia.infura.io/v3/7501310bfbe94f0fb0f9bf0c190a0a64",
 };
+
+// const mainnet = {
+//   chainId: 1,
+//   name: "Ethereum",
+//   currency: "ETH",
+//   explorerUrl: "https://etherscan.io",
+//   rpcUrl: "https://mainnet.infura.io/v3/7501310bfbe94f0fb0f9bf0c190a0a64",
+// };
 
 const metadata = {
   name: "Tweet App",
@@ -157,50 +167,54 @@ export default function Index() {
   };
 
   const connectContract = async () => {
-    if (isConnected && contract) {
-      getHolderData();
-      console.log("Address: " + address);
-      const allTokenHolder = await contract.balanceOf(address);
-      setAccountBalance(Number(allTokenHolder));
-      console.log("account balance: " + Number(allTokenHolder));
+    try {
+      if (isConnected && contract) {
+        getHolderData();
+        console.log("Address: " + address);
+        const allTokenHolder = await contract.balanceOf(address);
+        setAccountBalance(Number(allTokenHolder));
+        console.log("account balance: " + Number(allTokenHolder));
 
-      const totalHolder = await contract._userId();
-      setUserId(Number(totalHolder));
-      console.log("user id: " + Number(totalHolder));
+        const totalHolder = await contract._userId();
+        setUserId(Number(totalHolder));
+        console.log("user id: " + Number(totalHolder));
 
-      const supply = await contract.totalSupply();
-      const totalSupply = Number(supply);
-      setNoOfToken(totalSupply);
-      console.log("Number of Token supply: " + totalSupply);
+        const supply = await contract.totalSupply();
+        const totalSupply = Number(supply);
+        setNoOfToken(totalSupply);
+        console.log("Number of Token supply: " + totalSupply);
 
-      const name = await contract.name();
-      setTokenName(name);
-      console.log("Name: " + name);
+        const name = await contract.name();
+        setTokenName(name);
+        console.log("Name: " + name);
 
-      const symbol = await contract.symbol();
-      setTokenSymbol(symbol);
-      console.log("Symbol: " + symbol);
+        const symbol = await contract.symbol();
+        setTokenSymbol(symbol);
+        console.log("Symbol: " + symbol);
 
-      const standard = await contract.standard();
-      setTokenStandard(standard);
-      console.log("Standard: " + standard);
+        const standard = await contract.standard();
+        setTokenStandard(standard);
+        console.log("Standard: " + standard);
 
-      const ownerOfContract = await contract.ownerOfContract();
-      setTokenOwner(ownerOfContract);
-      console.log("Owner of contract: " + ownerOfContract);
+        const ownerOfContract = await contract.ownerOfContract();
+        setTokenOwner(ownerOfContract);
+        console.log("Owner of contract: " + ownerOfContract);
 
-      const balanceToken = await contract.balanceOf(ownerOfContract);
-      setTokenOwnerBalance(balanceToken);
-      console.log("Owner tokan balance: " + balanceToken);
-    }
-    if (isConnected && !contract) {
-      const signer = ethersProvider?.getSigner();
-      const contract = new ethers.Contract(
-        contractAddress,
-        contractAbi,
-        await signer
-      );
-      setContract(contract);
+        const balanceToken = await contract.balanceOf(ownerOfContract);
+        setTokenOwnerBalance(balanceToken);
+        console.log("Owner tokan balance: " + balanceToken);
+      }
+      if (isConnected && !contract) {
+        const signer = ethersProvider?.getSigner();
+        const contract = new ethers.Contract(
+          contractAddress,
+          contractAbi,
+          await signer
+        );
+        setContract(contract);
+      }
+    } catch (error) {
+      toast.error("Please Change to Sepolia Network");
     }
   };
 
@@ -216,6 +230,7 @@ export default function Index() {
 
   return (
     <div>
+      <ToastContainer />
       <Navbar
         isConnected={isConnected}
         address={address}
@@ -252,7 +267,9 @@ export default function Index() {
         </div>
       </section>
       <section className="flex gap-4 flex-col items-center justify-center w-full py-4 px-6 sm:px-16">
-        <h2 className="text-4xl font-bold text-[#113946]">Tokenomics</h2>
+        <h2 className="text-4xl font-bold text-[#113946] mb-[1rem]">
+          Tokenomics
+        </h2>
         <div className="w-full flex items-center justify-center gap-8 flex-col md:flex-row md:w-[500px]">
           <Image
             src={Logo}
@@ -284,8 +301,8 @@ export default function Index() {
         <h2 className="text-4xl font-bold text-[#113946] text-center">
           Transfer Token
         </h2>
-        <div className="w-[80vw] lg:w-[50vw] bg-red-400">
-          <div className=" w-full md:w-[60%] flex flex-col gap-3 py-8 px-4 bg-white clip">
+        <div className="w-[80vw] lg:w-[50vw] bg-image">
+          <div className=" w-full md:w-[60%] flex flex-col gap-3 py-8 px-4 bg-[rgba(255,255,255,.5)] clip">
             <div className="flex flex-col gap-2 text-[#113946]">
               <label htmlFor="address" className="font-bold text-xl">
                 To Address

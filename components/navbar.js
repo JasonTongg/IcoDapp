@@ -14,7 +14,7 @@ export default function navbar({
       <div className="flex items-center justify-between gap-4 py-4 px-6 sm:px-16 w-[90vw] lg:w-[70vw] mx-auto">
         <Image src={Logo} alt="logo" className="w-[70px] animateSpin2" />
         <div className="flex items-center justify-center gap-4 flex-col-reverse md:flex-row">
-          <div className="bg-[#EAD7BB] py-2 px-5 rounded-[15px] text-[#113946] max-w-[200px]">
+          <div className="bg-[#EAD7BB] py-2 px-5 rounded-[15px] text-[#113946] max-w-[300px]">
             Balance: {balance} JSN
           </div>
           <div className="bg-[#EAD7BB] py-2 px-5 rounded-[15px] text-[#113946]">
