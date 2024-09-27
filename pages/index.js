@@ -112,20 +112,23 @@ export default function Index() {
     if (contract) {
       try {
         const allTokenHolder = await contract.getTokenHolder();
-        const holder = [];
-        allTokenHolder.map(async (item, index) => {
-          const singleHolderData = await contract.getTokenHolderData(item);
-          const formattedData = {
-            _tokenId: singleHolderData[0],
-            _to: singleHolderData[1],
-            _from: singleHolderData[2],
-            _totalToken: singleHolderData[3],
-            _tokenHolder: singleHolderData[4],
-          };
-          holder[index] = formattedData;
-        });
-        console.log("holder: " + holder);
-        setHolderArray(holder);
+        let tempHolderArray = []; // Temporary array to store data
+
+        await Promise.all(
+          allTokenHolder.map(async (item) => {
+            const singleHolderData = await contract.getTokenHolderData(item);
+            const formattedData = {
+              _tokenId: singleHolderData[0],
+              _to: singleHolderData[1],
+              _from: singleHolderData[2],
+              _totalToken: singleHolderData[3],
+              _tokenHolder: singleHolderData[4],
+            };
+            tempHolderArray.push(formattedData);
+          })
+        );
+
+        setHolderArray(tempHolderArray); // Set state once after loop
       } catch (error) {
         console.error("Error Get Transaction Count: ", error);
       }
@@ -155,11 +158,6 @@ export default function Index() {
 
   const connectContract = async () => {
     if (isConnected && contract) {
-      // console.log("before get transaction");
-      // getTransaction();
-      // console.log("after get transaction");
-      // getTransactionCount();
-      // getBalance();
       getHolderData();
       console.log("Address: " + address);
       const allTokenHolder = await contract.balanceOf(address);
@@ -206,21 +204,9 @@ export default function Index() {
     }
   };
 
-  const getBalance = async () => {
-    if (isConnected && ethersProvider) {
-      try {
-        const balance = await ethersProvider.getBalance(address);
-        setBalance(ethers.formatEther(balance));
-      } catch (error) {
-        console.error("Error fetching balance: ", error);
-      }
-    }
-  };
-
   useEffect(() => {
     if (isConnected) {
       connectContract();
-      console.log(address);
     }
   }, [contract, isConnected]);
 
@@ -237,15 +223,12 @@ export default function Index() {
         openModal={openModal}
         balance={accountBalance}
       />
-      <section
-        className="py-10 px-16 grid gap-4"
-        style={{ gridTemplateColumns: "1.5fr 1fr" }}
-      >
+      <section className="py-10 px-6 sm:px-16 w-[90vw] lg:w-[70vw] mx-auto grid gap-8 grid1">
         <div className="text-[#113946] flex flex-col items-start justify-center gap-4">
-          <h2 className="text-4xl font-bold">
+          <h2 className="text-3xl lg:text-4xl font-bold md:text-start text-center">
             Powering the Future of Decentralized Finance
           </h2>
-          <p className="text-lg text-justify">
+          <p className="text-md lg:text-lg text-justify">
             JSN is an ERC-20 token designed to revolutionize decentralized
             finance, providing secure, efficient, and transparent transactions
             on the Ethereum blockchain. Built for the modern crypto ecosystem,
@@ -253,41 +236,44 @@ export default function Index() {
             while driving innovation in the DeFi space.
           </p>
         </div>
-        <div className="relative flex items-center justify-center">
+        <div className="relative flex items-center justify-center row-start-1 md:row-start-1 md:col-start-2">
           <Image
             src={Logo}
             alt="logo"
-            className="w-[300px] animate-spin !duration-[3000ms]"
+            className="w-[200px] lg:w-[300px] animateSpin !duration-[3000ms]"
           />
           <div className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]">
             <Image
               src={Logo}
               alt="logo"
-              className="w-[100px] animate-spin !duration-[3000ms]"
+              className="w-[70px] lg:w-[100px] animateSpin2 !duration-[3000ms]"
             />
           </div>
         </div>
       </section>
-      <section className="flex gap-4 flex-col items-center justify-center w-full py-4 px-16">
+      <section className="flex gap-4 flex-col items-center justify-center w-full py-4 px-6 sm:px-16">
         <h2 className="text-4xl font-bold text-[#113946]">Tokenomics</h2>
-        <div className="w-full flex items-center justify-center gap-8">
-          <Image src={Logo} className="w-[200px] animate-bounce"></Image>
-          <div className="flex flex-col gap-4">
+        <div className="w-full flex items-center justify-center gap-8 flex-col md:flex-row md:w-[500px]">
+          <Image
+            src={Logo}
+            className="w-[200px] animateSpin md:animate-bounce"
+          ></Image>
+          <div className="flex flex-col gap-4 w-full">
             <div className="flex flex-col gap-2 text-[#113946]">
               <p className="font-bold text-2xl">Token Name</p>
-              <p className="bg-white rounded-[10px] py-2 px-4 w-[300px] border-[3px] border-[#BCA37F]">
+              <p className="bg-white rounded-[10px] py-2 px-4 w-full md:w-[500px] border-[3px] border-[#BCA37F]">
                 JSN Token
               </p>
             </div>
             <div className="flex flex-col gap-2 text-[#113946]">
               <p className="font-bold text-2xl">Symbol</p>
-              <p className="bg-white rounded-[10px] py-2 px-4 w-[300px] border-[3px] border-[#BCA37F]">
+              <p className="bg-white rounded-[10px] py-2 px-4 w-full md:w-[500px] border-[3px] border-[#BCA37F]">
                 JSN
               </p>
             </div>
             <div className="flex flex-col gap-2 text-[#113946]">
               <p className="font-bold text-2xl">Total Supply</p>
-              <p className="bg-white rounded-[10px] py-2 px-4 w-[300px] border-[3px] border-[#BCA37F]">
+              <p className="bg-white rounded-[10px] py-2 px-4 w-full md:w-[500px] border-[3px] border-[#BCA37F]">
                 {noOfToken ? noOfToken + " JSN" : "0 JSN"}
               </p>
             </div>
@@ -295,12 +281,11 @@ export default function Index() {
         </div>
       </section>
       <section className="flex flex-col items-center justify-center gap-4 w-full py-4 px-16 mt-9">
-        <h2 className="text-4xl font-bold text-[#113946]">Transfer Token</h2>
-        <div className="w-[50vw] bg-red-400">
-          <div
-            className="w-[60%] flex flex-col gap-3 py-8 px-4 bg-white"
-            style={{ clipPath: "polygon(0 0%, 100% 0, 85% 100%, 0% 100%)" }}
-          >
+        <h2 className="text-4xl font-bold text-[#113946] text-center">
+          Transfer Token
+        </h2>
+        <div className="w-[80vw] lg:w-[50vw] bg-red-400">
+          <div className=" w-full md:w-[60%] flex flex-col gap-3 py-8 px-4 bg-white clip">
             <div className="flex flex-col gap-2 text-[#113946]">
               <label htmlFor="address" className="font-bold text-xl">
                 To Address
@@ -309,7 +294,7 @@ export default function Index() {
                 type="text"
                 id="address"
                 onChange={(e) => setInputAddrss(e.target.value)}
-                className="bg-white outline-none rounded-[10px] py-2 px-4 w-[85%] border-[3px] border-[#BCA37F]"
+                className="bg-white outline-none rounded-[10px] py-2 px-4 w-full md:w-[85%] border-[3px] border-[#BCA37F]"
               />
             </div>
             <div className="flex flex-col gap-2 text-[#113946]">
@@ -320,29 +305,42 @@ export default function Index() {
                 type="number"
                 id="value"
                 onChange={(e) => setInputValue(e.target.value)}
-                className="bg-white outline-none rounded-[10px] py-2 px-4 w-[85%] border-[3px] border-[#BCA37F]"
+                className="bg-white outline-none rounded-[10px] py-2 px-4 w-full md:w-[85%] border-[3px] border-[#BCA37F]"
               />
             </div>
             <button
               onClick={transferToken}
-              className="bg-[#BCA37F] mt-2 py-2 px-2 flex w-[85%] items-center justify-center rounded-[10px] font-bold text-white"
+              className="bg-[#BCA37F] mt-2 py-2 px-2 flex w-full md:w-[85%] items-center justify-center rounded-[10px] font-bold text-white"
             >
               Transfer
             </button>
           </div>
         </div>
       </section>
-      <section className="mt-8 w-full py-4 px-16 flex flex-col items-center justify-center">
+      <section className="mt-8 w-full py-4 px-16 flex flex-col items-center justify-center gap-8">
         <h2 className="text-4xl font-bold text-[#113946]">Holders</h2>
         {holderArray?.length > 0 && (
-          <div className="flex items-center justify-center flex-col gap-4">
+          <div
+            className="grid gap-4 w-full max-w-[300px]"
+            style={{
+              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            }}
+          >
             {holderArray?.map((item, index) => (
-              <div key={index}>
-                <p>id: {Number(item?._tokenId)}</p>
-                <p>total token: {Number(item?._totalToken)}</p>
-                <p>from: {item?._from}</p>
-                <p>to: {item?._to}</p>
-                <p>isHolder: {item?._tokenHolder}</p>
+              <div
+                key={index}
+                className="border-[5px] rounded-[10px] border-[#BCA37F] flex flex-col items-center justify-center gap-4 p-8"
+              >
+                <p>
+                  User {item?._to.substring(0, 4)}...{item?._to.substr(-4)}
+                </p>
+                <p className="w-[100%] p-4 bg-[#EAD7BB] text-center text-2xl">
+                  {Number(item?._totalToken)} JSN
+                </p>
+                <p>
+                  Token transfer from {item?._from.substring(0, 4)}...
+                  {item?._from.substr(-4)}
+                </p>
               </div>
             ))}
           </div>

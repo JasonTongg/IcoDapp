@@ -1,3 +1,39 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.animateSpin {
+  animation: spin 25s linear infinite;
+}
+
+.animateSpin2 {
+  animation: spin2 25s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin2 {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.grid1 {
+  grid-template-columns: 1.5fr 1fr;
+
+  @media only screen and (max-width: 760px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.clip {
+  clip-path: polygon(0 0%, 100% 0, 85% 100%, 0% 100%);
+
+  @media only screen and (max-width: 765px) {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
