@@ -323,6 +323,7 @@ export default function Index() {
             </div>
             <button
               onClick={transferToken}
+              disabled={address?.length <= 0}
               className="bg-[#BCA37F] mt-2 py-2 px-2 flex w-full md:w-[85%] items-center justify-center rounded-[10px] font-bold text-white"
             >
               Transfer
@@ -332,7 +333,7 @@ export default function Index() {
       </section>
       <section className="mt-8 w-full py-4 px-16 flex flex-col items-center justify-center gap-8">
         <h2 className="text-4xl font-bold text-[#113946]">Holders</h2>
-        {holderArray?.length > 0 && (
+        {holderArray?.length > 0 ? (
           <div
             className="grid gap-4 w-full "
             style={{
@@ -345,18 +346,31 @@ export default function Index() {
                 className="border-[5px] rounded-[10px] border-[#BCA37F] flex flex-col items-center justify-center gap-4 p-8"
               >
                 <p>
-                  User {item?._to.substring(0, 4)}...{item?._to.substr(-4)}
+                  {item?._to
+                    ? "User " +
+                      item?._to.substring(0, 4) +
+                      "..." +
+                      item?._to.substr(-4)
+                    : "Waiting to Connect Wallet..."}
                 </p>
                 <p className="w-[100%] p-4 bg-[#EAD7BB] text-center text-2xl">
-                  {Number(item?._totalToken)} JSN
+                  {item?._totalToken
+                    ? Number(item?._totalToken) + "JSN"
+                    : "Waiting to Connect Wallet..."}
                 </p>
                 <p>
-                  Token transfer from {item?._from.substring(0, 4)}...
-                  {item?._from.substr(-4)}
+                  {item?._from
+                    ? "Token transfer from " +
+                      item?._from.substring(0, 4) +
+                      "..." +
+                      item?._from.substr(-4)
+                    : "Waiting to Connect Wallet..."}
                 </p>
               </div>
             ))}
           </div>
+        ) : (
+          "Waiting to Connect Wallet..."
         )}
       </section>
     </div>
