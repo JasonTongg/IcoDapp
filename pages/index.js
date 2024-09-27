@@ -153,12 +153,8 @@ export default function Index() {
           BigInt(+inputValue)
         );
         contract.on("Transfer", (from, to, value) => {
-          console.log(
-            `Transfer Token executed: from ${from} to ${to} for ${value} ETH`
-          );
-          // toast.success("Transaction Has Been Added to Sepolia Blockchain...", {
-          //   theme: "dark",
-          // });
+          toast.success(`Transfer Token to ${to} for ${value} JSN Success`);
+          getHolderData();
         });
       } catch (error) {
         console.error("Error Transfer Token: ", error);
@@ -338,7 +334,7 @@ export default function Index() {
         <h2 className="text-4xl font-bold text-[#113946]">Holders</h2>
         {holderArray?.length > 0 && (
           <div
-            className="grid gap-4 w-full max-w-[300px]"
+            className="grid gap-4 w-full "
             style={{
               gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
             }}
